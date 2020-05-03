@@ -1,0 +1,11 @@
+/* html,
+body, */
+#___gatsby,
+canvas {
+  /* background-color: black; */
+  background-color: rgb(48, 44, 44);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
