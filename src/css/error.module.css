@@ -1,0 +1,7 @@
+.error {
+  background: linear-gradient(rgba(30, 30, 30, 1), rgba(80, 80, 80, 1));
+  min-height: calc(100vh - 62px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
