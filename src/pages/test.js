@@ -85,8 +85,8 @@ const Home = () => {
 export default () => {
   return (
     <Canvas
-      //camera={{ position: [0, 0, 3] }}
-      camera={{ position: [40, 40, 800] }}
+      camera={{ position: [-2, -1, 0] }}
+      //camera={{ position: [40, 40, 800] }}
       onCreated={({ gl }) => {
         gl.shadowMap.enabled = true;
         gl.shadowMap.type = THREE.PCFSoftShadowMap;

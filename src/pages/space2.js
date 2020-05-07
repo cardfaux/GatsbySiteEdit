@@ -1,0 +1,110 @@
+import React, { Suspense, useRef } from 'react';
+import { Link } from 'gatsby';
+import {
+  Canvas,
+  useLoader,
+  useFrame,
+  extend,
+  useThree,
+} from 'react-three-fiber';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
+import Layout from '../components/Layout.component';
+import SEO from '../components/SEO.component';
+import '../styles/style.css';
+
+// Calling extend with the native OrbitControls class from Three.js
+// will make orbitControls available as a native JSX element.
+// Notice how the OrbitControls classname becomes lowercase orbitControls when used as JSX element.
+extend({ OrbitControls });
+
+function Loading() {
+  return (
+    <mesh visible position={[0, 0, 0]} rotation={[0, 0, 0]}>
+      <sphereGeometry attach="geometry" args={[1, 16, 16]} />
+      <meshStandardMaterial
+        attach="material"
+        color="white"
+        transparent
+        opacity={0.6}
+        roughness={1}
+        metalness={0}
+      />
+    </mesh>
+  );
+}
+
+function ArWing() {
+  const group = useRef();
+  const { nodes } = useLoader(GLTFLoader, '/arwing.glb');
+  return (
+    <group ref={group}>
+      <mesh visible geometry={nodes.Default.geometry}>
+        <meshStandardMaterial
+          attach="material"
+          color="white"
+          roughness={0.3}
+          metalness={0.3}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+const CameraControls = () => {
+  // Get a reference to the Three.js Camera, and the canvas html element.
+  // We need these to setup the OrbitControls class.
+  // https://threejs.org/docs/#examples/en/controls/OrbitControls
+
+  const {
+    camera,
+    gl: { domElement },
+  } = useThree();
+
+  // Ref to the controls, so that we can update them on every frame using useFrame
+  const controls = useRef();
+  useFrame(state => controls.current.update());
+  return (
+    <orbitControls
+      ref={controls}
+      args={[camera, domElement]}
+      enableZoom={false}
+      maxAzimuthAngle={Math.PI / 4}
+      maxPolarAngle={Math.PI}
+      minAzimuthAngle={-Math.PI / 4}
+      minPolarAngle={0}
+    />
+  );
+};
+
+export default function App() {
+  return (
+    <Layout>
+      <SEO
+        title="SpaceShip With Orbit Controls"
+        description="3D SpaceShip with orbit controls"
+      />
+      <Canvas style={{ background: 'white' }}>
+        <CameraControls />
+        <directionalLight intensity={0.5} />
+        <Suspense fallback={<Loading />}>
+          <ArWing />
+        </Suspense>
+      </Canvas>
+      {/* <a
+        href="https://codeworkshop.dev/blog/2020-04-03-adding-orbit-controls-to-react-three-fiber/"
+        className="blog-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Blog Post
+      </a> */}
+      <Link to="/space2/">space2</Link>
+      <Link to="/space/">space</Link>
+      <Link to="/ball/">ball</Link>
+      <Link to="/blocks/">blocks</Link>
+    </Layout>
+  );
+}
